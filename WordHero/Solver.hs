@@ -1,6 +1,7 @@
 module WordHero.Solver where
 
-import Data.List ((\\), reverse)
+import Data.List ((\\), reverse, sortBy, group)
+import Data.Function (on)
 import Data.Maybe (mapMaybe)
 import Prelude hiding (lookup)
 import qualified Data.Map as M
@@ -59,7 +60,13 @@ allForPos n b d = onlyLegitWords
     onlyLegitWords = mapMaybe (`lookup` d) legitPathsAsWords
 
 allWords :: Board -> Dict -> [String]
-allWords b d = concatMap (\n -> allForPos n b d) [0..15]
+allWords b d = orderDescByScoreWithoutDuplicates $
+               concatMap (\n -> allForPos n b d) [0..15]
+  where
+    orderDescByScoreWithoutDuplicates = reverse
+                                        . map head
+                                        . group
+                                        . sortBy (compare `on` wordScore)
 
 wordScore :: String -> Int
 wordScore [] = 0
