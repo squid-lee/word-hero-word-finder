@@ -70,7 +70,9 @@ allWords b d = orderDescByScoreWithoutDuplicates $
 
 wordScore :: String -> Int
 wordScore [] = 0
-wordScore (x:y:w) = (maybe 0 id (letterScores [x,y])) + wordScore w
+wordScore (x:y:w) = case letterScores [x,y] of
+                      Just n -> n + wordScore w
+                      Nothing -> wordScore [x] + wordScore (y:w)
 wordScore (l:w) = (maybe 0 id (letterScores [l])) + wordScore w
 
 
