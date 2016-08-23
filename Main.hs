@@ -5,9 +5,6 @@ import WordHero.Trie
 import WordHero.Solver
 import Data.List
 
-import System.Process (system)
-import Control.Concurrent (threadDelay)
-
 main = do
   dict <- crackLibDict
   putStrLn "Please type in board as one row, spaces between tiles"
@@ -24,10 +21,3 @@ dictAsTrie filePath = do
   return . fromList $ zip splitByLine splitByLine
 
 crackLibDict = dictAsTrie "/home/joseph/dict"
-
-sayWords :: String -> IO ()
-sayWords s = system mPlayer >> return () -- (threadDelay 10000)
-  where
-    url = "\"http://translate.google.com/translate_tts?ie=UTF-8&tl=en&q=" ++ s' ++ "\""
-    mPlayer = unwords ["mplayer", "-quiet", url, "2>&1", ">", "/dev/null"]
-    s' = intercalate "+" $ words s
